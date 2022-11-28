@@ -18,4 +18,25 @@ router.get(
   }
 );
 
+router.get("/verify", (req, res) => {
+  try {
+    if (req.user) {
+      console.log(req.user);
+    } else {
+      console.log("Not Auth");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
 module.exports = router;
