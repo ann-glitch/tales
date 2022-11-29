@@ -3,8 +3,12 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const connectDB = require("./config/db");
 const colors = require("colors");
+const Handlebars = require("handlebars");
 const session = require("express-session");
 const exphbs = require("express-handlebars");
+const {
+  allowInsecurePrototypeAccess,
+} = require("@handlebars/allow-prototype-access");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,6 +27,7 @@ app.engine(
   "handlebars",
   exphbs.engine({
     defaultLayout: "main",
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
   })
 );
 app.set("view engine", "handlebars");
