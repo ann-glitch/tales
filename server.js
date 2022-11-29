@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const path = require("path");
 const passport = require("passport");
 const connectDB = require("./config/db");
 const colors = require("colors");
@@ -19,6 +20,10 @@ dotenv.config({ path: "./config/config.env" });
 //connectDB
 connectDB();
 
+//body-parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //passport config
 require("./config/passport")(passport);
 
@@ -35,6 +40,7 @@ app.set("view engine", "handlebars");
 //load route files
 const auth = require("./routes/auth");
 const index = require("./routes/index");
+const stories = require("./routes/stories");
 
 //session
 app.use(
@@ -56,9 +62,13 @@ app.use((req, res, next) => {
   next();
 });
 
+//set static folder
+app.use(express.static(path.join(__dirname, "public")));
+
 //mount routers
 app.use("/auth", auth);
 app.use("/", index);
+app.use("/stories", stories);
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`.cyan);

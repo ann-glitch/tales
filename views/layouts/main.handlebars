@@ -7,15 +7,22 @@
     <title>Tales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script></head>
 <body>
    {{> _header}}
-
+   
+     {{#if user}}
+     {{> _add-btn}}
+     {{/if}}
+  
   <main>
       <div class="container">
         {{{body}}}
     </div>
   </main>
+
+  {{> _footer}}
 
 
   <script
@@ -25,9 +32,15 @@
   </script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
    <script src="https://use.fontawesome.com/6b423213fa.js"></script>
+
    <script >
    $(document).ready(() => {
   $('.sidenav').sidenav();
+  $('select').formSelect();
+
+  CKEDITOR.replace( 'body', {
+    plugins: "wysiwygarea,toolbar,basicstyles,link"
+  } );
 });
    </script>
 
