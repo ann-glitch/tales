@@ -17,7 +17,19 @@ main {
     font-size: 16px;
   }
 
-  footer {
+footer {
     margin-top: 20px;
   }
+
+.story-text {
+  height: 100px;
+} 
+
+.dash-status {
+  text-transform: capitalize;
+}
+
+#delete-form {
+  display: inline;
+}
 

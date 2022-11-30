@@ -20,6 +20,9 @@ dotenv.config({ path: "./config/config.env" });
 //connectDB
 connectDB();
 
+//load handlebars helpers
+const { truncate, stripTags, formatDate } = require("./helpers/hbs");
+
 //body-parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,6 +34,11 @@ require("./config/passport")(passport);
 app.engine(
   "handlebars",
   exphbs.engine({
+    helpers: {
+      truncate,
+      stripTags,
+      formatDate,
+    },
     defaultLayout: "main",
     handlebars: allowInsecurePrototypeAccess(Handlebars),
   })
@@ -63,7 +71,7 @@ app.use((req, res, next) => {
 });
 
 //set static folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 //mount routers
 app.use("/auth", auth);
