@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const passport = require("passport");
 const connectDB = require("./config/db");
+const methodOverride = require("method-override");
 const colors = require("colors");
 const Handlebars = require("handlebars");
 const session = require("express-session");
@@ -21,11 +22,14 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 //load handlebars helpers
-const { truncate, stripTags, formatDate } = require("./helpers/hbs");
+const { truncate, stripTags, formatDate, select } = require("./helpers/hbs");
 
 //body-parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//method override
+app.use(methodOverride("_method"));
 
 //passport config
 require("./config/passport")(passport);
@@ -38,6 +42,7 @@ app.engine(
       truncate,
       stripTags,
       formatDate,
+      select,
     },
     defaultLayout: "main",
     handlebars: allowInsecurePrototypeAccess(Handlebars),

@@ -61,4 +61,36 @@ router.post("/", async (req, res) => {
   res.status(201).redirect(`/stories/show/${story.id}`);
 });
 
+//edit story
+router.put("/:id", async (req, res) => {
+  let allowComments;
+
+  if (req.body.allowComments) {
+    allowComments = true;
+  } else {
+    allowComments = false;
+  }
+
+  const story = await Story.findByIdAndUpdate({
+    _id: req.params.id,
+    title: req.body.title,
+    body: req.body.body,
+    status: req.body.status,
+    allowComments,
+    new: true,
+    runValidators: true,
+  }).lean();
+
+  res.status(200).redirect("/dashboard");
+});
+
+//delete story
+router.delete("/:id", async (req, res) => {
+  await Story.deleteOne({
+    _id: req.params.id,
+  });
+
+  res.status(200).redirect("/dashboard");
+});
+
 module.exports = router;
