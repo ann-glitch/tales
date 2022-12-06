@@ -7,6 +7,39 @@
                 {{{story.body}}}
             </div>
         </div>
+
+    {{#if story.allowComments}}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Comments</span>
+                {{#if user}}
+                    <form method="post" action="/stories/comment/{{story._id}}">
+                        <div class="input-field">
+                            <textarea name="commentBody" class="materialize-textarea" ></textarea>
+                            <label>Add Comment</label>
+                        </div>
+                        <input type="submit" value="submit" class="btn">
+                    </form>
+                {{else}}
+                    <p>Please <a href="/auth/google">login</a> to leave a comment</p>
+                {{/if}}
+            </div>
+        </div>
+        {{#each story.comments}}
+            <div class="card">
+                <div class="card-content">
+                    <h6>{{commentBody}}</h6>
+                  <div class="chip">
+                     <img src="{{commentUser.image}}" >
+                        {{commentUser.firstName}} {{commentUser.lastName}}
+                  </div>
+                  <br>
+                  <small>Commented: {{formatDate commentDate "MMMM Do YYYY"}}</small>
+                </div>
+            </div>
+        {{/each}}
+    {{/if}}
+
     </div>
     <div class="col s12 m3">
         <div class="card center-align">
@@ -16,7 +49,7 @@
                 <img src="{{story.user.image}}" class="circle responsive-img">
             </div>
             <div class="card-action">
-                <a href="/stories/user/{{story.user.id}}">More from {{story.user.firstName}}</a>
+                <a href="/stories/user/{{story.user._id}}">More from {{story.user.firstName}}</a>
             </div>
         </div>
     </div>

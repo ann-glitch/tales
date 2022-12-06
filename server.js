@@ -22,7 +22,13 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 //load handlebars helpers
-const { truncate, stripTags, formatDate, select } = require("./helpers/hbs");
+const {
+  truncate,
+  stripTags,
+  formatDate,
+  select,
+  editIcon,
+} = require("./helpers/hbs");
 
 //body-parser
 app.use(express.json());
@@ -43,6 +49,7 @@ app.engine(
       stripTags,
       formatDate,
       select,
+      editIcon,
     },
     defaultLayout: "main",
     handlebars: allowInsecurePrototypeAccess(Handlebars),

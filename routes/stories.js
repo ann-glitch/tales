@@ -7,6 +7,7 @@ const Story = require("../models/Story");
 router.get("/", async (req, res) => {
   const stories = await Story.find({ status: "public" })
     .populate("user")
+    .sort({ date: "desc" })
     .lean();
 
   res.status(200).render("stories/index", { stories });
@@ -18,6 +19,7 @@ router.get("/show/:id", async (req, res) => {
     _id: req.params.id,
   })
     .populate("user")
+    .populate("comments.commentUser")
     .lean();
 
   res.status(200).render("stories/show", { story });
@@ -33,26 +35,23 @@ router.get("/edit/:id", ensureAuthenticated, async (req, res) => {
     _id: req.params.id,
   }).lean();
 
-  res.status(200).render("stories/edit", {
-    story,
-  });
+  if (story.user != req.user.id) {
+    return res.status(401).redirect("/stories");
+  } else {
+    // console.log(story);
+    res.status(200).render("stories/edit", {
+      ...story,
+    });
+  }
 });
 
 // add story
 router.post("/", async (req, res) => {
-  let allowComments;
-
-  if (req.body.allowComments) {
-    allowComments = true;
-  } else {
-    allowComments = false;
-  }
-
   const newStory = {
     title: req.body.title,
     body: req.body.body,
     status: req.body.status,
-    allowComments,
+    allowComments: req.body.allowComments === "on",
     user: req.user.id,
   };
 
@@ -63,23 +62,12 @@ router.post("/", async (req, res) => {
 
 //edit story
 router.put("/:id", async (req, res) => {
-  let allowComments;
+  req.body.allowComments = req.body.allowComments === "on";
 
-  if (req.body.allowComments) {
-    allowComments = true;
-  } else {
-    allowComments = false;
-  }
-
-  const story = await Story.findByIdAndUpdate({
-    _id: req.params.id,
-    title: req.body.title,
-    body: req.body.body,
-    status: req.body.status,
-    allowComments,
+  const story = await Story.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
-  }).lean();
+  });
 
   res.status(200).redirect("/dashboard");
 });
@@ -91,6 +79,29 @@ router.delete("/:id", async (req, res) => {
   });
 
   res.status(200).redirect("/dashboard");
+});
+
+//add comments
+router.post("/comment/:id", async (req, res) => {
+  const newComment = {
+    commentBody: req.body.commentBody,
+    commentUser: req.user.id,
+  };
+
+  const story = await Story.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      $push: {
+        comments: newComment,
+      },
+    }
+  );
+
+  console.log(story);
+
+  res.status(201).redirect(`stories/show/${story.id}`);
 });
 
 module.exports = router;
