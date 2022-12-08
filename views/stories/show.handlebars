@@ -31,7 +31,7 @@
                     <h6>{{commentBody}}</h6>
                   <div class="chip">
                      <img src="{{commentUser.image}}" >
-                        {{commentUser.firstName}} {{commentUser.lastName}}
+                         <a href="/stories/user/{{story.commentUser._id}}">{{commentUser.firstName}} {{commentUser.lastName}}</a>
                   </div>
                   <br>
                   <small>Commented: {{formatDate commentDate "MMMM Do YYYY"}}</small>

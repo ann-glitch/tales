@@ -3,6 +3,7 @@ const router = express.Router();
 const Story = require("../models/Story");
 const { ensureAuthenticated, ensureGuest } = require("../helpers/auth");
 
+// home page
 router.get("/", ensureGuest, (req, res) => {
   res.render("index/welcome");
 });
@@ -16,6 +17,7 @@ router.get("/dashboard", ensureAuthenticated, async (req, res) => {
   });
 });
 
+// about route
 router.get("/about", (req, res) => {
   res.render("index/about");
 });

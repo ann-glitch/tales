@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
+//google auth
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+//google callback
 router.get(
   "/google/callback",
   passport.authenticate("google", {
@@ -18,6 +20,7 @@ router.get(
   }
 );
 
+//verification
 router.get("/verify", (req, res) => {
   try {
     if (req.user) {
@@ -30,6 +33,7 @@ router.get("/verify", (req, res) => {
   }
 });
 
+//logout route
 router.get("/logout", (req, res) => {
   req.logout(function (err) {
     if (err) {
