@@ -7,5 +7,5 @@
 ## setup
 
 ```
-yarn add && yarn dev
+yarn && yarn dev
 ```
