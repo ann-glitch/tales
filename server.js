@@ -7,6 +7,8 @@ const methodOverride = require("method-override");
 const colors = require("colors");
 const Handlebars = require("handlebars");
 const session = require("express-session");
+const mongoose = require("mongoose");
+const MongoStore = require("connect-mongo");
 const exphbs = require("express-handlebars");
 const {
   allowInsecurePrototypeAccess,
@@ -68,7 +70,7 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    store: new MongoStore({ mongoUrl: process.env.MONGO_URI }),
   })
 );
 
