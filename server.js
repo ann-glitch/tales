@@ -70,9 +70,22 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
 );
+
+if (app.get("env") === "production") {
+  app.set("trust proxy", 1); // trust first proxy
+
+  // serve secure cookies
+  app.use(
+    session({
+      cookie: {
+        secure: true,
+      },
+    })
+  );
+}
 
 //passport middleware
 app.use(passport.initialize());
