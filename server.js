@@ -65,27 +65,23 @@ const index = require("./routes/index");
 const stories = require("./routes/stories");
 
 //session
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-  })
-);
+const sess = {
+  secret: "keyboard cat",
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+};
 
 if (app.get("env") === "production") {
-  app.set("trust proxy", 1); // trust first proxy
-
-  // serve secure cookies
-  app.use(
-    session({
-      cookie: {
-        secure: true,
-      },
-    })
-  );
+  app.set("trust proxy", 1);
+  sess.cookie = {
+    httpOnly: true,
+    secure: true,
+    maxAge: 1000 * 60 * 60 * 48,
+    sameSite: "none",
+  };
 }
+app.use(session(sess));
 
 //passport middleware
 app.use(passport.initialize());
