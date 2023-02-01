@@ -9,3 +9,7 @@
 ```
 yarn && yarn dev
 ```
+
+## .env file
+
+Replace the sample.env file in the config folder to config.env and replace the values with your own values.

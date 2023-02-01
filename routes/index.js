@@ -5,7 +5,7 @@ const { ensureAuthenticated, ensureGuest } = require("../helpers/auth");
 
 // home page
 router.get("/", ensureGuest, (req, res) => {
-  res.render("index/welcome");
+  res.status(200).render("index/welcome");
 });
 
 //users' stories dashboard
@@ -19,7 +19,7 @@ router.get("/dashboard", ensureAuthenticated, async (req, res) => {
 
 // about route
 router.get("/about", (req, res) => {
-  res.render("index/about");
+  res.status(200).render("index/about");
 });
 
 module.exports = router;
